@@ -48,3 +48,175 @@ body{
 
 /* MAP */
 .mapCard{padding:14px}
+.map{
+  position:relative;
+  height:520px;
+  border-radius:18px;
+  overflow:hidden;
+}
+.map iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+}
+.mapOverlay{
+  position:absolute;
+  left:14px; right:14px; top:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  z-index:2;
+  pointer-events:none;
+}
+.badge{
+  pointer-events:auto;
+  padding:10px 14px;
+  border-radius:999px;
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(10px);
+  font-weight:800;
+  font-size:13px;
+  max-width:75%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.btn{
+  pointer-events:auto;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(10px);
+  color:var(--text);
+  font-weight:800;
+  font-size:13px;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.ctaWrap{
+  margin-top:16px;
+  display:flex;
+  justify-content:center;
+}
+.cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ffffff,#eaeaff);
+  color:#000;
+  font-weight:800;
+  font-size:14px;
+  text-decoration:none;
+  box-shadow:0 12px 40px rgba(124,92,255,.25);
+}
+
+/* INFO */
+.side{padding:22px;display:grid;gap:16px}
+.logo{
+  font-family:'Montserrat',sans-serif;
+  font-weight:300;
+  letter-spacing:.75em;
+  text-transform:uppercase;
+  font-size:18px;
+}
+.text{color:var(--muted);line-height:1.7;margin:0}
+.coords{
+  width:fit-content;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:13px;
+  color:var(--muted);
+}
+.divider{height:1px;background:var(--line);margin:8px 0}
+</style>
+</head>
+
+<body>
+<main class="wrap">
+  <div class="layout">
+
+    <!-- LEFT: MAP -->
+    <section class="card mapCard">
+      <div class="map">
+        <div class="mapOverlay">
+          <div class="badge" id="badgeText">📍</div>
+          <a class="btn" id="openMapsBtn" target="_blank" rel="noopener">🗺️ Open Maps</a>
+        </div>
+
+        <iframe id="mapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+
+      <!-- Street View knop onder de kaart -->
+      <div class="ctaWrap">
+        <a class="cta" id="streetBtn" target="_blank" rel="noopener">
+          👣 Bekijk in Street View
+        </a>
+      </div>
+    </section>
+
+    <!-- RIGHT: INFO -->
+    <aside class="card side">
+      <div class="logo">GIOIA MUNDO</div>
+
+      <p class="text">
+        You find the most amazing art on the streets all over the world.<br><br>
+        We simply love it and want to expose the art more by connecting it with streetwear.<br><br>
+        On the map you see the exact spot where the street art of your T is born,
+        and below you find the artist who created it.
+      </p>
+
+      <span class="coords" id="addrText"></span>
+      <div class="divider"></div>
+
+      <p class="text" style="margin:0;">
+        (Instagram is verwijderd.)
+      </p>
+    </aside>
+
+  </div>
+</main>
+
+<script>
+  // 📍 Exacte NDSM-Werf locatie uit jouw Street View link
+  const address = "NDSM-Werf, Amsterdam, Netherlands";
+  const lat = 52.4006028;
+  const lng = 4.8961185;
+  const zoom = 19;
+
+  // Street View parameters uit jouw link
+  const heading = 195.19;
+  const pitch = -2.32;
+  const fov = 75;
+  const panoId = "xrGHU2op3yJI6mWrBDDvUw";
+
+  const openMapsUrl =
+    `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+
+  const streetViewUrl =
+    `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}` +
+    `&heading=${heading}&pitch=${pitch}&fov=${fov}&pano=${panoId}`;
+
+  const mapEmbedUrl =
+    `https://www.google.com/maps?output=embed&z=${zoom}&t=k&ll=${lat},${lng}`;
+
+  // UI
+  document.getElementById("badgeText").textContent = `📍 ${address}`;
+  document.getElementById("addrText").textContent = `${address} — ${lat}, ${lng}`;
+  document.getElementById("openMapsBtn").href = openMapsUrl;
+  document.getElementById("streetBtn").href = streetViewUrl;
+  document.getElementById("mapFrame").src = mapEmbedUrl;
+</script>
+
+</body>
+</html>
